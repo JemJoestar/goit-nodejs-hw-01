@@ -1,20 +1,15 @@
 const contactsApi = require("./contacts");
 const { Command } = require("commander");
 const program = new Command();
-program.option("-a, --action <type>", "action")
+program
+  .option("-a, --action <type>", "action")
   .option("-i, --id <type>", "id")
   .option("-n, --name <type>", "name")
   .option("-e, --email <type>", "email")
-  .option("-p, --phone <type>", "phone")
-  
-  program.parse(process.argv);
-console.log(
-  `parce`,
-  process.argv
-);
+  .option("-p, --phone <type>", "phone");
+
+program.parse(process.argv);
 const argv = program.opts();
-console.log(`program.opts():`, program.opts())
-console.log(`argv:`, argv);
 
 const invokeAction = async ({ action, id, name, email, phone }) => {
   switch (action) {
@@ -22,11 +17,14 @@ const invokeAction = async ({ action, id, name, email, phone }) => {
       console.table(await contactsApi.listContacts());
       break;
     case "add":
-      return await contactsApi.addContact(name, email, phone);
-    case "find":
-      return await contactsApi.getContactById(id);
+      console.log(await contactsApi.addContact(name, email, phone));
+      break;
+    case "get":
+      console.log(await contactsApi.getContactById(id));
+      break;
     case "remove":
-      return await contactsApi.removeContact(id);
+      console.log(await contactsApi.removeContact(id));
+      break;
     default:
       console.warn("\x1B[31m Unknown action type!");
   }
